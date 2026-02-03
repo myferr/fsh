@@ -1,7 +1,40 @@
-import { unlink, writeFile as write } from "node:fs/promises";
+import { unlink, writeFile as write, readFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import path from "node:path";
 
 import { Elysia, t } from "elysia";
+
+interface Metadata {
+	[token: string]: string;
+}
+
+async function getMetadata(): Promise<Metadata> {
+	if (!process.env.FILESYSTEM_UPLOAD_PATH) {
+		throw new Error("FILESYSTEM_UPLOAD_PATH is not set.");
+	}
+	const metadataPath = path.resolve(
+		process.cwd(),
+		process.env.FILESYSTEM_UPLOAD_PATH,
+		"metadata.json",
+	);
+	if (existsSync(metadataPath)) {
+		const content = await readFile(metadataPath, "utf-8");
+		return JSON.parse(content);
+	}
+	return {};
+}
+
+async function saveMetadata(metadata: Metadata): Promise<void> {
+	if (!process.env.FILESYSTEM_UPLOAD_PATH) {
+		throw new Error("FILESYSTEM_UPLOAD_PATH is not set.");
+	}
+	const metadataPath = path.resolve(
+		process.cwd(),
+		process.env.FILESYSTEM_UPLOAD_PATH,
+		"metadata.json",
+	);
+	await write(metadataPath, JSON.stringify(metadata, null, 2));
+}
 
 export const uploadRoute = new Elysia().post(
 	"/u",
@@ -43,8 +76,15 @@ export const uploadRoute = new Elysia().post(
 
 		await write(uploadPath, fileBuffer);
 
+		const deleteToken = crypto.randomUUID();
+		const metadata = await getMetadata();
+		metadata[deleteToken] = uploadFileName;
+		await saveMetadata(metadata);
+
+		const deleteUrl = `/d/${deleteToken}`;
+
 		let _deleteTimeout: ReturnType<typeof setTimeout> | undefined;
-		let expiresInSeconds: number | undefined ;
+		let expiresInSeconds: number | undefined;
 
 		if (typeof expires !== "undefined") {
 			expiresInSeconds = parseInt(String(expires), 10);
@@ -66,6 +106,7 @@ export const uploadRoute = new Elysia().post(
 		return {
 			message: `File uploaded successfully at ${uploadFileName}`,
 			expiresIn: expiresInSeconds,
+			delete_url: deleteUrl,
 		};
 	},
 	{

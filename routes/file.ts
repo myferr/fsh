@@ -25,7 +25,7 @@ export const fileRoute = new Elysia().get(
 		const filePath = path.resolve(
 			process.cwd(),
 			process.env.FILESYSTEM_UPLOAD_PATH,
-			filename
+			filename,
 		);
 
 		if (!existsSync(filePath)) {
@@ -34,7 +34,7 @@ export const fileRoute = new Elysia().get(
 		}
 
 		const ext = path.extname(filename).toLowerCase();
-		let contentType: string | undefined = undefined;
+		let contentType: string | undefined;
 
 		switch (ext) {
 			case ".jpg":
@@ -81,7 +81,7 @@ export const fileRoute = new Elysia().get(
 			};
 		} else {
 			set.headers = {
-				"Content-Disposition": `attachment; filename="${filename}"`
+				"Content-Disposition": `attachment; filename="${filename}"`,
 			};
 		}
 

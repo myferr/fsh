@@ -1,6 +1,7 @@
 import { baseRoute } from "./routes/base";
 import { fileRoute } from "./routes/file";
 import { uploadRoute } from "./routes/upload";
+import { deleteRoute } from "./routes/delete";
 
 import { Elysia } from "elysia";
 
@@ -10,7 +11,11 @@ if (!process.env.PORT) {
 	throw new Error("PORT is not set. Please set the PORT environment variable.");
 }
 
-const app = new Elysia().use(baseRoute).use(uploadRoute).use(fileRoute);
+const app = new Elysia()
+	.use(baseRoute)
+	.use(uploadRoute)
+	.use(fileRoute)
+	.use(deleteRoute);
 app.listen(parseInt(process.env.PORT, 10));
 
 const frames = [
