@@ -2,9 +2,10 @@
 
 set -e
 
-IMAGE_NAME=${IMAGE_NAME:-backend}
-TAG=${TAG:-latest}
-REGISTRY=${REGISTRY:-docker.io}
+IMAGE_NAME=${1:-backend}
+TAG=${2:-latest}
+REGISTRY=${3:-docker.io}
+
 
 echo "Building Docker image..."
 docker build -t "${IMAGE_NAME}:${TAG}" .
