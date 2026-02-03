@@ -15,6 +15,7 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/index.ts ./index.ts
 COPY --from=builder /app/routes ./routes
 COPY --from=builder /app/uploads ./uploads
+COPY --from=builder /app/package.json ./package.json
 
 ENV PORT=655353
 ENV FILESYSTEM_UPLOAD_PATH=uploads
