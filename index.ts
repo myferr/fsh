@@ -1,7 +1,37 @@
 import { Elysia } from "elysia";
 
-const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
+if (!process.env.PORT) {
+  throw new Error("PORT is not set. Please set the PORT environment variable.");
+}
 
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+const app = new Elysia().get("/", () => ">-<> swimming").listen(parseInt(process.env.PORT, 10));
+
+const hostname = app.server?.hostname ?? "localhost";
+const port = process.env.PORT;
+
+const frames = [
+  " >-<>        ",
+  "   >-<>      ",
+  "     >-<>    ",
+  "       >-<>  ",
+  "         >-<>",
+  "       <>-<  ",
+  "     <>-<    ",
+  "   <>-<      ",
+  " <>-<        ",
+  "<>-<         ",
+  "             ",
+];
+
+const swimLength = 24;
+const info = `swimming @ \x1b[32m${hostname}:${port}\x1b[0m`;
+
+let i = 0;
+setInterval(() => {
+  const clear = `\r${" ".repeat(swimLength + info.length)}\r`;
+  process.stdout.write(clear);
+  const frame = `\x1b[92m${frames[i % frames.length]}\x1b[0m ${info}`;
+  process.stdout.write(frame);
+  i++;
+}, 300);
+
