@@ -1,6 +1,11 @@
-# File Storage Service
+<div align=center>
 
-A lightweight file upload and storage service built with [Bun](https://bun.sh/) and [Elysia](https://elysia.js.org/).
+<img width="1640" height="350" src="https://github.com/user-attachments/assets/3d9e8d91-cc80-4600-8c6d-89718bb333c4" />
+
+# fsh
+### A file upload and storage service built with [Bun](https://bun.sh/) and [Elysia](https://elysiajs.com/).
+
+</div>
 
 ## Features
 
