@@ -40,14 +40,14 @@
    bun run dev
    ```
 
-The server will start on the port specified in your environment variables (default: 3000).
+The server will start on the port specified in your environment variables (default: 65535).
 
 ### Docker Deployment
 
 Build and run using Docker:
 ```bash
 docker build -t file-storage .
-docker run -p 3000:3000 file-storage
+docker run -p 65535:65535 file-storage
 ```
 
 Or use Docker Compose:
@@ -61,14 +61,12 @@ docker-compose up -d
 |----------|----------|-------------|---------|
 | `PORT` | Yes | Port number for the server to listen on | - |
 | `FILESYSTEM_UPLOAD_PATH` | Yes | Directory path for storing uploaded files | `uploads` |
-| `NODE_ENV` | No | Environment mode | `production` |
 
 ### Example `.env.local`
 
 ```env
-PORT=3000
+PORT=65535
 FILESYSTEM_UPLOAD_PATH=uploads
-NODE_ENV=development
 ```
 
 ## API Reference
@@ -108,7 +106,7 @@ Upload a new file to the storage service.
 
 **Example (cURL):**
 ```bash
-curl -X POST http://localhost:3000/u \
+curl -X POST http://localhost:65535/u \
   -F "file=@/path/to/image.jpg" \
   -F "name=my-image" \
   -F "expires=3600"
@@ -136,7 +134,7 @@ Download a file by its filename.
 
 **Example (cURL):**
 ```bash
-curl -O http://localhost:3000/f/my-image.jpg
+curl -O http://localhost:65535/f/my-image.jpg
 ```
 
 **Response:** The file content with appropriate Content-Type header.
@@ -160,7 +158,7 @@ Delete a file using its one-time delete token.
 
 **Example (cURL):**
 ```bash
-curl http://localhost:3000/d/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+curl http://localhost:65535/d/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
 **Response:**
