@@ -52,7 +52,6 @@ export const uploadRoute = new Elysia().post(
 				_deleteTimeout = setTimeout(async () => {
 					try {
 						await unlink(uploadPath);
-						console.log("A file was deleted.");
 					} catch (_e) {
 						return {
 							error: _e,
